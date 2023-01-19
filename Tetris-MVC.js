@@ -31,27 +31,31 @@ class Piece{
   static TETROMINOS = [
     // carré
     [
-      [1, 1],
-      [1, 1]
+      [0, 1, 1],
+      [0, 1, 1],
+      [0, 0, 0]
     ],
     // barre
     [
-      [0, 2 ,0 ,0 ],
-      [0, 2 ,0 ,0 ],
-      [0, 2 ,0 ,0 ],
-      [0, 2 ,0 ,0 ]
+      [0, 2 ,0 ,0, 0 ],
+      [0, 2 ,0 ,0, 0 ],
+      [0, 2 ,0 ,0, 0 ],
+      [0, 2 ,0 ,0, 0 ],
+      [0, 0, 0, 0, 0]
     ],
     // L
     [
-      [3, 0, 0],
-      [3, 0, 0],
-      [3, 3, 0]
+      [3, 0, 0, 0,],
+      [3, 0, 0, 0],
+      [3, 3, 0, 0],
+      [0, 0, 0, 0]
     ],
     // L inversé
     [
-      [0, 4, 0],
-      [0, 4, 0],
-      [4, 4, 0]
+      [0, 4, 0, 0],
+      [0, 4, 0, 0],
+      [4, 4, 0, 0],
+      [0, 0, 0, 0]
     ],
     // T
     [
@@ -179,8 +183,6 @@ class Model {
     }
 
     
-    
-    //rotate
 
     rotate() {
       // On crée une copie du bloc.
@@ -270,7 +272,7 @@ class Model {
           }
         }
 
-        console.log(current_tetro.y + (current_tetro.matrix[0].length + 1) + " " + this.matrix.length);
+        console.log(current_tetro.y + (current_tetro.matrix[0].length + 1) + " " + this.matrix.length); //
 
       
         this.DisplayGrid(this.matrix); 
@@ -290,16 +292,27 @@ class Model {
       }
 
         // collision entre les blocs
-        collision(){
-        for (let i = 0; i < current_tetro.matrix.length; i++) { 
-          for (let j = 0; j < current_tetro.matrix[0].length; j++) { 
-            if (current_tetro.matrix[i][j] !== 0 && this.matrix[current_tetro.y + i + 1][current_tetro.x + j] !== 0) { 
-              console.log("Collision");
-              current_tetro = this.getRandomTetromino();
+      //   collision(){
+      //   for (let i = 0; i < current_tetro.matrix.length; i++) { 
+      //     for (let j = 0; j < current_tetro.matrix[0].length; j++) { 
+      //       if (current_tetro.matrix[i][j] !== 0 && this.matrix[current_tetro.y + i + 1][current_tetro.x + j] !== 0) { 
+      //         console.log("Collision");
+      //         current_tetro = this.getRandomTetromino(); //
+      //       }
+      //     }
+      //   }
+      // }
+
+      collision() {
+        for (let i = 0; i < current_tetro.matrix.length; i++) {
+            for (let j = 0; j < current_tetro.matrix[0].length; j++) {
+                if (current_tetro.matrix[i][j] !== 0 && this.matrix[current_tetro.y + i + 1][current_tetro.x + j] !== 0) {
+                    return true;
+                }
             }
-          }
         }
-      }
+        return false;
+    }
 
     
 
