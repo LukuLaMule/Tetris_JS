@@ -1,7 +1,12 @@
 
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
 #canvas{
-    
-    margin-top: 7px;
     border: 1px solid black;
     padding-left: 0;
     padding-right: 0;
@@ -10,22 +15,28 @@
     display: block;
     width: 450px;
     color: rgb(0, 136, 255);
+    transform: scale(0.8);
 }
 
 #tetris{
-
     text-align: center ;
     margin-left: auto;
-    margin-right: auto;  
-    
-
+    margin-right: auto; 
+    font-family: Silkscreen; 
+    font-size: 50px;
 }
 
+#tetris h2{
+    margin: 0;
+}
+
+/* */
+
 body{
-
-background-image: url('https://images2.alphacoders.com/941/thumbbig-941898.webp') ;
-background-repeat: no-repeat;
-background-size: cover;
-
-
+    top: 0;
+    background-image: url('https://images2.alphacoders.com/941/thumbbig-941898.webp') ;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    overflow: hidden; /* Hide vertical scrollbar */
 }

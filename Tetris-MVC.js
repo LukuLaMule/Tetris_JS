@@ -1,3 +1,4 @@
+
 class Piece{
 
   //rotate
@@ -84,15 +85,14 @@ class Piece{
   }
 }
 
+export let current_tetro;
+
 class Model {
 
   //fonction bouger droite gauche
 
-  
-
     constructor() {
     
-
         this.matrix = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -119,16 +119,31 @@ class Model {
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         ];
         this.index = 0; // On initialise l'index à 0.
-       // this.current_tetro = new Piece(4, 0, 4); // On crée un nouveau bloc.
-        this.current_tetro = this.getRandomTetromino(); // On récupère un bloc aléatoire.
+        // this.current_tetro = new Piece(4, 0, 4); // On crée un nouveau bloc.
+        //current_tetro = this.getRandomTetromino(); // On récupère un bloc aléatoire.
+        this.getRandomTetromino();
         this.gameover = false; // On initialise la variable gameover à false.
          // On génère un nombre aléatoire entre 0 et 6.
     }
+
     getRandomTetromino() { // On crée une fonction qui va nous permettre de récupérer un bloc aléatoire.
       let randomIndex = Math.floor(Math.random() * Piece.TETROMINOS.length);
-      return new
-      Piece(4, 0, randomIndex);
+      current_tetro = new Piece(3, 0, randomIndex);
+
+      // ajouter la piece dans la matrice
+      for (let i = 0; i < current_tetro.matrix.length; i++) {
+        for (let j = 0; j < current_tetro.matrix[0].length; j++) {
+          if (current_tetro.matrix[i][j] !== 0) {
+            let pieceValue = current_tetro.matrix[i][j];
+            console.log(current_tetro.y + i, current_tetro.x + j);
+            this.matrix[current_tetro.y + i][current_tetro.x + j] = pieceValue;
+          }
+        }
+      }
+
+      return current_tetro;
     }
+
     // Binding.
     bindDisplayGrid (callback) { 
       this.DisplayGrid = callback; // On veut pouvoir actualiser la View (depuis le Controller) quand nous récupérons les données.
@@ -140,154 +155,146 @@ class Model {
       
     }
 
-
-
     play () {
-
-        // Reset canvas.
- 
-
-        // Modifier la matrix.
-        // matrix[bloc.y][bloc.x] = 0;
-
-        for ( let i = 0; i < this.current_tetro.matrix.length; i++){ // On parcourt la matrice du bloc.
-
-                for ( let j = 0; j < this.current_tetro.matrix[0].length; j++){ // On parcourt la matrice du bloc.
-                    this.matrix[this.current_tetro.y+i][this.current_tetro.x+j] = 0;   // On met à jour la matrice du jeu.
-                    
-                }
-        }
-       
-        this.current_tetro.y += 1; // On incrémente la position du bloc en y.
-        
+      // Pour chaque block de matrix
   
-        for ( let i = 0; i <this.current_tetro.matrix.length; i++){ // On parcourt la matrice du bloc.
-
-            for ( let j = 0; j < this.current_tetro.matrix[0].length; j++){ //  On parcourt la matrice du bloc.
-              if (this.current_tetro.matrix[i][j] != 0) // Si la valeur de la matrice du bloc est différente de 0.
-                this.matrix[this.current_tetro.y+i][this.current_tetro.x+j] = this.current_tetro.matrix[i][j]; // On met à jour la matrice du jeu.
-            
-            }
-        }
-
-        this.DisplayGrid(this.matrix); // On actualise la View.
-
-        this.index +=1; // On incrémente l'index.
+      this.DisplayGrid(this.matrix); // On actualise la View.
         
-
-        // if (this.index == 14) { // Si l'index est égal à 12, on réinitialise l'index à 0.
-        //   this.gameover = true; // On met la variable gameover à true.
-        // }
+      if (this.index == 15) { // Si l'index est égal à 12, on réinitialise l'index à 0.
+        this.gameover = true; // On met la variable gameover à true.
+      }
 
         if (this.gameover) { // Si la variable gameover est à true, on arrête le jeu.
           this.SetInterval(); // On arrête le setInterval.
-        }
+      }
     }
-
     
     moveLeft(){ // On déplace le bloc vers la gauche.
 
-        for ( let i = 0; i <this.current_tetro.matrix.length; i++){
-          for ( let j = 0; j < this.current_tetro.matrix[0].length; j++){ 
-            this.matrix[this.current_tetro.y+i][this.current_tetro.x+j] = 0; // On met à jour la matrice du jeu.
-        }
-    }
-        this.current_tetro.x -=1; // On décrémente la position du bloc en x.
+        for (let i = 0; i < current_tetro.matrix.length; i++){
+            for (let j = 0; j < current_tetro.matrix[0].length; j++){ 
+                this.matrix[current_tetro.y+i][current_tetro.x+j] = 0; // On met à jour la matrice du jeu.
+            }
+        }    
 
-        if (!this.current_tetro.isInsideCanvas(this.canvasHeight, this.canvasWidth)) { // Si le bloc sort du canvas.
-          this.current_tetro.x +=1; // On incrémente la position du bloc en x.
-        }
-  
+        current_tetro.x -=1; // On décrémente la position du bloc en x.
+
+        // Vérifier si le bloc est dans le canvas.
+        if (!current_tetro.isInsideCanvas(this.canvasHeight, this.canvasWidth)) { // Si le bloc sort du canvas.
+          console.log("Le bloc sort du canvas.");
+            current_tetro.x +=1; // On incrémente la position du bloc en x.
+        }  
   }
+  
     moveRight(){ // On déplace le bloc vers la droite.
         
-        for ( let i = 0; i <this.current_tetro.matrix.length; i++){ // On parcourt la matrice du bloc.
-          for ( let j = 0; j < this.current_tetro.matrix[0].length; j++){ // On parcourt la matrice du bloc.
-            this.matrix[this.current_tetro.y+i][this.current_tetro.x+j] = 0; // On met à jour la matrice du jeu.
+        for ( let i = 0; i < current_tetro.matrix.length; i++){ // On parcourt la matrice du bloc.
+          for ( let j = 0; j < current_tetro.matrix[0].length; j++){ // On parcourt la matrice du bloc.
+            this.matrix[current_tetro.y+i][current_tetro.x+j] = 0; // On met à jour la matrice du jeu.
         }
     }
-          this.current_tetro.x +=1; // On incrémente la position du bloc en x.
+          current_tetro.x +=1; // On incrémente la position du bloc en x.
 
-          if (!this.current_tetro.isInsideCanvas(this.canvasHeight, this.canvasWidth)) { // Si le bloc sort du canvas.
-            this.current_tetro.x = -1; // On décrémente la position du bloc en x.
+          if (!current_tetro.isInsideCanvas(this.canvasHeight, this.canvasWidth)) { // Si le bloc sort du canvas.
+            console.log("Le bloc sort du canvas.");
+            current_tetro.x -= 1; // On décrémente la position du bloc en x.
           }
   }
 
       moveDown(){ // On déplace le bloc vers le bas.
-      
-        for ( let i = 0; i <this.current_tetro.matrix.length; i++){
-          for ( let j = 0; j < this.current_tetro.matrix[0].length; j++){ 
-            this.matrix[this.current_tetro.y+i][this.current_tetro.x+j] = 0;
-            
-           
+
+        for ( let i = 0; i < current_tetro.matrix.length; i++){
+          for ( let j = 0; j < current_tetro.matrix[0].length; j++){ 
+            this.matrix[current_tetro.y+i][current_tetro.x+j] = 0;
+          }
         }
-        this.current_tetro.y +=1; // On incrémente la position du bloc en y.
-        for ( let i = 0; i <this.current_tetro.matrix.length; i++){
-          for ( let j = 0; j < this.current_tetro.matrix[0].length; j++){ 
-            this.matrix[this.current_tetro.y+i][this.current_tetro.x+j] = 0;
-            
-      }
-      //this.displayGrid(this.matrix);// On actualise la View.
-    }
-  }
-}
-      keepInCanvas() {
-        for (let y = 0; y < this.current_tetro.matrix.length; y++) {
-          for (let x = 0; x < this.current_tetro.matrix[y].length; x++) {
-            if (this.current_tetro.matrix[y][x] !== 0) {
-              if (this.current_tetro.x + x < 0 || this.current_tetro.x + x >= this.matrix[0].length || this.current_tetro.y + y < 0 || this.current_tetro.y + y >= this.matrix.length) {
-                return true;
-              }
+
+        current_tetro.y +=1; // On incrémente la position du bloc en x.
+
+  
+        for ( let i = 0; i <current_tetro.matrix.length; i++){ // On parcourt la matrice du bloc.
+          for ( let j = 0; j < current_tetro.matrix[0].length; j++){ //  On parcourt la matrice du bloc.
+            if (current_tetro.matrix[i][j] != 0) // Si la valeur de la matrice du bloc est différente de 0.
+              this.matrix[current_tetro.y+i][current_tetro.x+j] = current_tetro.matrix[i][j]; // On met à jour la matrice du jeu.
+          }
+        }
+
+        console.log(current_tetro.y + (current_tetro.matrix[0].length + 1) + " " + this.matrix.length);
+
+      
+        this.DisplayGrid(this.matrix);
+
+
+        for ( let i = 0; i <current_tetro.matrix.length; i++){ // On parcourt la matrice du bloc.
+          for ( let j = 0; j < current_tetro.matrix[0].length; j++){ //  On parcourt la matrice du bloc.
+            if (current_tetro.y + (current_tetro.matrix[0].length) > this.matrix.length && current_tetro.matrix[i][j] !== 0) { // Si le bloc sort du canvas.
+              console.log("Le bloc sort du canvas.");
+              current_tetro.y -= 1; // On décrémente la position du bloc en y.
+
+              current_tetro = this.newTetro(); // On crée un nouveau bloc.
+
+              this.DisplayGrid(this.matrix, current_tetro);
             }
           }
         }
-        return false;
       }
-
-
-  // -------------------- test ------------ //
-  
-  
-  
-  }
-
-  
-    
-  // ----------- fin test ------------- //
-      
-
-
+    }
+                
+    // keepInCanvas() {
+    //   for (let y = 0; y < this.current_tetro.matrix.length; y++) {
+    //     for (let x = 0; x < this.current_tetro.matrix[y].length; x++) {
+    //       if (this.current_tetro.matrix[y][x] !== 0) {
+    //         if (this.current_tetro.x + x < 0 || this.current_tetro.x + x >= this.matrix[0].length || this.current_tetro.y + y < 0 || this.current_tetro.y + y >= this.matrix.length) { // Si le bloc sort du canvas.
+    //           return true;
+    //         }
+    //       }
+    //     }
+    //   }
+    //   return false;
+    // }
 
   class View {
     constructor(canvas_id) {
         this.canvas = document.getElementById(canvas_id)
         this.context = this.canvas.getContext("2d");
-        this.couleur = ['purple', 'yellow', 'green', 'purple', 'orange', 'pink', 'cyan'];
+        this.couleur = ['purple', 'yellow', 'green', 'blue', 'orange', 'pink', 'cyan'];
         this.rand = Math.floor(Math.random() * this.couleur.length);   
       this.initView();
     }
 
-    initView () {}
+    initView () {}    
   
     displayGrid (matrix) {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.context.strokeStyle = '#ccc';
 
-        for (let i =0; i < matrix.length; i++){
-        
-            for (let j =0; j < matrix.length; j++){ // On parcourt la matrice du jeu.
-                if(matrix [i][j] != 0 ){ // Si la case est différente de 0, on dessine un carré.
-                
-                this.context.fillStyle = this.couleur[matrix [i][j]]; // On définit la couleur du carré.
-                this.context.fillRect(j * 50, i * 50, 50, 50); // On dessine le carré.
-                this.context.stroke();
-                }
-                else{
-                    this.context.strokeStyle = "#ccc";
-                    this.context.strokeRect(j * 50, i * 50, 50, 50);
-    
-                }
-            }
+        // Dessine les lignes verticales de la grille
+        for (let x = 0; x < matrix[0].length; x++) {
+          this.context.beginPath();
+          this.context.moveTo(x * 39, 0);
+          this.context.lineTo(x * 39, matrix.length * 39);
+          this.context.stroke();
+      }
+
+      // Dessine les lignes horizontales de la grille
+      for (let y = 0; y < matrix.length; y++) {
+          this.context.beginPath();
+          this.context.moveTo(0, y * 39);
+          this.context.lineTo(matrix[0].length * 39, y * 39);
+          this.context.stroke();
+      }
+
+      for (let i = 0; i < matrix.length; i++) {
+        for (let j = 0; j < matrix[0].length; j++) {
+        /*// Si la case est à 0
+        this.context.strokeStyle = "#ccc";
+        this.context.strokeRect(j * 50, i * 50, 50, 50);*/
+          if (matrix[i][j] != 0) {  // On vérifie que la case est vide.
+            this.context.fillStyle = this.couleur[matrix [i][j]]; // On définit la couleur du carré.
+            this.context.fillRect(j * 39, i * 39, 39, 39); // On dessine le carré.
+          }        
         }
+      } 
     }
   }
   
@@ -305,8 +312,13 @@ class Model {
       this.stopGame = this.stopGame.bind(this);
       this.model.bindSetInterval(this.stopGame);
       this.initEvent();
+
+      this.model.play();
+    
       this.interval = setInterval(() => {
-        this.model.play();
+        if (!this.model.moveDown()) {
+          
+        }
     }, 500);
 
       
