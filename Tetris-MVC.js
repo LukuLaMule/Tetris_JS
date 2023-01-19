@@ -3,19 +3,28 @@ class Piece{
 
   //rotate
       
-  rotate(){
+  // rotate(canvasHeight, canvasWidth) {
+  //   let save = JSON.parse(JSON.stringify(this.matrix)); // On crée une copie de la matrice du bloc.
+  //   let tempMatrix = [];
+  //   //on fait une rotation de 90°
+  //   for (let i = 0; i < this.matrix.length; i++) {
+  //     tempMatrix[i] = [];
+  //     for (let j = 0; j < this.matrix[0].length; j++) {
+  //       tempMatrix[i][j] = save[this.matrix.length - 1 - j][i];
+  //     }
+  //   }
+    
+  //   // On vérifie si la pièce ne sort pas du canvas après la rotation
+  //   if (this.x + tempMatrix[0].length > canvasWidth || this.y + tempMatrix.length > canvasHeight) {
+  //     return;
+  //   }
+  //   this.matrix = tempMatrix;
+  // }
+
+  
 
     
-    let save = JSON.parse(JSON.stringify(this.matrix)); // On crée une copie de la matrice du bloc.
-
-    //on fait une rotation de 90°
-    for (let i = 0; i < this.matrix.length; i++){
-      for (let j = 0; j < this.matrix[0].length; j++){
-        this.matrix[i][j] = save[this.matrix.length - 1 - j][i];
-      }
-    }
-
-  }
+    
   
 
 
@@ -160,7 +169,7 @@ class Model {
   
       this.DisplayGrid(this.matrix); // On actualise la View.
         
-      if (this.index == 15) { // Si l'index est égal à 12, on réinitialise l'index à 0.
+      if (this.index == 15) { // Si l'index est égal à 15, on réinitialise l'index à 0.
         this.gameover = true; // On met la variable gameover à true.
       }
 
@@ -168,7 +177,49 @@ class Model {
           this.SetInterval(); // On arrête le setInterval.
       }
     }
+
     
+    
+    //rotate
+
+    rotate() {
+      // On crée une copie du bloc.
+      let copy = JSON.parse(JSON.stringify(current_tetro));
+      // On fait une rotation de 90°.
+      for (let i = 0; i < copy.matrix.length; i++) {
+        for (let j = 0; j < copy.matrix[0].length; j++) {
+          copy.matrix[i][j] = current_tetro.matrix[j][i];
+        }
+      }
+      // On inverse les lignes.
+      copy.matrix = copy.matrix.map((row) => row.reverse());
+      // On met à jour la matrice du jeu.
+      for (let i = 0; i < copy.matrix.length; i++) {
+        for (let j = 0; j < copy.matrix[0].length; j++) {
+          this.matrix[current_tetro.y + i][current_tetro.x + j] = 0;
+        }
+      }
+      // On met à jour la matrice du bloc.
+      current_tetro.matrix = copy.matrix;
+      // On vérifie si le bloc est dans le canvas.
+      if (!current_tetro.isInsideCanvas(this.canvasHeight, this.canvasWidth)) {
+        // Si le bloc sort du canvas, on annule la rotation.
+        current_tetro.matrix = copy.matrix.reverse();
+        current_tetro.matrix = current_tetro.matrix.map((row) => row.reverse());
+      }
+      // On met à jour la matrice du jeu.
+      for (let i = 0; i < current_tetro.matrix.length; i++) {
+        for (let j = 0; j < current_tetro.matrix[0].length; j++) {
+          if (current_tetro.matrix[i][j] !== 0) {
+            let pieceValue = current_tetro.matrix[i][j];
+            this.matrix[current_tetro.y + i][current_tetro.x + j] = pieceValue;
+          }
+        }
+      }
+    }
+    
+
+  
     moveLeft(){ // On déplace le bloc vers la gauche.
 
         for (let i = 0; i < current_tetro.matrix.length; i++){
@@ -222,7 +273,7 @@ class Model {
         console.log(current_tetro.y + (current_tetro.matrix[0].length + 1) + " " + this.matrix.length);
 
       
-        this.DisplayGrid(this.matrix);
+        this.DisplayGrid(this.matrix); 
 
 
         for ( let i = 0; i <current_tetro.matrix.length; i++){ // On parcourt la matrice du bloc.
@@ -231,27 +282,31 @@ class Model {
               console.log("Le bloc sort du canvas.");
               current_tetro.y -= 1; // On décrémente la position du bloc en y.
 
-              current_tetro = this.newTetro(); // On crée un nouveau bloc.
-
+              current_tetro = this.getRandomTetromino(); // On crée un nouveau bloc.
               this.DisplayGrid(this.matrix, current_tetro);
+            } 
+          }
+        }
+      }
+
+        // collision entre les blocs
+        collision(){
+        for (let i = 0; i < current_tetro.matrix.length; i++) { 
+          for (let j = 0; j < current_tetro.matrix[0].length; j++) { 
+            if (current_tetro.matrix[i][j] !== 0 && this.matrix[current_tetro.y + i + 1][current_tetro.x + j] !== 0) { 
+              console.log("Collision");
+              current_tetro = this.getRandomTetromino();
             }
           }
         }
       }
-    }
-                
-    // keepInCanvas() {
-    //   for (let y = 0; y < this.current_tetro.matrix.length; y++) {
-    //     for (let x = 0; x < this.current_tetro.matrix[y].length; x++) {
-    //       if (this.current_tetro.matrix[y][x] !== 0) {
-    //         if (this.current_tetro.x + x < 0 || this.current_tetro.x + x >= this.matrix[0].length || this.current_tetro.y + y < 0 || this.current_tetro.y + y >= this.matrix.length) { // Si le bloc sort du canvas.
-    //           return true;
-    //         }
-    //       }
-    //     }
-    //   }
-    //   return false;
-    // }
+
+    
+
+}
+              
+   
+  
 
   class View {
     constructor(canvas_id) {
@@ -278,9 +333,9 @@ class Model {
 
       // Dessine les lignes horizontales de la grille
       for (let y = 0; y < matrix.length; y++) {
-          this.context.beginPath();
-          this.context.moveTo(0, y * 39);
-          this.context.lineTo(matrix[0].length * 39, y * 39);
+          this.context.beginPath(); // On commence un nouveau tracé.
+          this.context.moveTo(0, y * 38.8); // 38.8 pour que les lignes soient bien alignées
+          this.context.lineTo(matrix[0].length * 38.8, y * 38.8);
           this.context.stroke();
       }
 
@@ -291,7 +346,7 @@ class Model {
         this.context.strokeRect(j * 50, i * 50, 50, 50);*/
           if (matrix[i][j] != 0) {  // On vérifie que la case est vide.
             this.context.fillStyle = this.couleur[matrix [i][j]]; // On définit la couleur du carré.
-            this.context.fillRect(j * 39, i * 39, 39, 39); // On dessine le carré.
+            this.context.fillRect(j * 38.9, i * 38.9, 39, 39); // On dessine le carré.
           }        
         }
       } 
@@ -342,7 +397,7 @@ class Model {
             this.model.moveRight();
             break;
           case 'ArrowUp':
-            this.Piece.rotate();
+            this.model.rotate();
             break;
           case 'ArrowDown':
             this.model.moveDown();
