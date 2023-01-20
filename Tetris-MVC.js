@@ -36,10 +36,10 @@ class Piece{
     ],
     // barre
     [
-      [0, 2 ,0 ,0],
-      [0, 2 ,0 ,0],
-      [0, 2 ,0 ,0],
-      [0, 2 ,0 ,0]
+      [0, 0 ,2 ,0],
+      [0, 0 ,2 ,0],
+      [0, 0 ,2 ,0],
+      [0, 0 ,2 ,0]
     ],
     // L
     [
@@ -85,7 +85,7 @@ class Piece{
     for (let i = 0; i < this.matrix.length; i++) {
       for (let j = 0; j < this.matrix[0].length; j++) {
         if (this.matrix[i][j] !== 0) { // On vérifie si la case n'est pas vide.
-          if (this.x + j < 0 || this.x + j + this.matrix[0].length >= 14 || this.y + i < 0 || this.y + i + this.matrix[0].length > 23) { // On vérifie si la pièce ne sort pas du canvas.
+          if (this.x + j < 0 || this.x + j + this.matrix[0].length >= 14 ) { // On vérifie si la pièce ne sort pas du canvas.
             
             return false;
           }
@@ -171,13 +171,13 @@ class Model {
   
       this.DisplayGrid(this.matrix); // On actualise la View.
         
-      if (this.index == 15) { // Si l'index est égal à 15, on réinitialise l'index à 0.
-        this.gameover = true; // On met la variable gameover à true.
-      }
+    // //  if (this.index == 15) { // Si l'index est égal à 15, on réinitialise l'index à 0.
+    //     this.gameover = true; // On met la variable gameover à true.
+    //   }
 
-        if (this.gameover) { // Si la variable gameover est à true, on arrête le jeu.
-          this.SetInterval(); // On arrête le setInterval.
-      }
+    //     if (this.gameover) { // Si la variable gameover est à true, on arrête le jeu.
+    //       this.SetInterval(); // On arrête le setInterval.
+    //   }
     }
 
     
@@ -231,7 +231,7 @@ class Model {
         current_tetro.x -=1; // On décrémente la position du bloc en x.
 
         // Vérifier si le bloc est dans le canvas.
-        if (!current_tetro.isInsideCanvas(this.canvasHeight, this.canvasWidth)) { // Si le bloc sort du canvas.
+        if (!current_tetro.isInsideCanvas()) { // Si le bloc sort du canvas.
           console.log("Le bloc sort du canvas.");
             current_tetro.x +=1; // On incrémente la position du bloc en x.
         }  
@@ -246,7 +246,7 @@ class Model {
     }
           current_tetro.x +=1; // On incrémente la position du bloc en x.
 
-          if (!current_tetro.isInsideCanvas(this.canvasHeight, this.matrix[0].length)) { // Si le bloc sort du canvas.
+          if (!current_tetro.isInsideCanvas()) { // Si le bloc sort du canvas.
             console.log("Le bloc sort du canvas.");
             current_tetro.x -= 1; // On décrémente la position du bloc en x.
           }
@@ -254,60 +254,76 @@ class Model {
 
       moveDown(){ // On déplace le bloc vers le bas.
 
-        for ( let i = 0; i < current_tetro.matrix.length; i++){
-          for ( let j = 0; j < current_tetro.matrix[0].length; j++){ 
-            this.matrix[current_tetro.y+i][current_tetro.x+j] = 0;
+      
+
+        let authorized = true; // On initialise la variable authorized à true.
+        console.log("-- ",current_tetro.y + 1 + current_tetro.matrix.length);
+        if (current_tetro.y + 1 + current_tetro.matrix.length > this.matrix.length) {
+          console.log("test"+this.matrix);
+          // for ( let i = 0; i < current_tetro.matrix.length; i++ ){ // On parcourt la matrice du bloc.
+          //   for ( let j = 0; j < current_tetro.matrix[0].length; j++){
+              let line = 1 + current_tetro.y + current_tetro.matrix.length - this.matrix.length; // On calcule la ligne à partir de laquelle on vérifie si le bloc est en bas du canvas.
+             // console.log(line);
+              for ( let i = 0; i < current_tetro.matrix.length ;  i++){
+                
+                if (current_tetro.matrix[current_tetro.matrix.length -line][i] !== 0){ // Si la ligne est différente de 0.
+                  console.log(line);
+                  authorized = false;
+                  break 
+              
+              
+                }
+             
+              } 
+
           }
-        }
 
-        current_tetro.y +=1; // On incrémente la position du bloc en x.
+            if (authorized == true ){ // Si le bloc n'est pas en bas du canvas. ( authorized est = a true de base)
+              for ( let i = 0; i < current_tetro.matrix.length; i++){
+                for ( let j = 0; j < current_tetro.matrix[0].length; j++){ 
+                  this.matrix[current_tetro.y+i][current_tetro.x+j] = 0;
+                }
+              } 
+              current_tetro.y += 1;
 
-  
-        for ( let i = 0; i <current_tetro.matrix.length; i++){ // On parcourt la matrice du bloc.
+            } else {
+              
+              current_tetro = this.getRandomTetromino();
+              
+            }    
+
+          // current_tetro.y +=1; // On incrémente la position du bloc en x.
+        
+        
+        for ( let i = 0; i < current_tetro.matrix.length; i++){ // On parcourt la matrice du bloc.
           for ( let j = 0; j < current_tetro.matrix[0].length; j++){ //  On parcourt la matrice du bloc.
-            if (current_tetro.matrix[i][j] != 0) // Si la valeur de la matrice du bloc est différente de 0.
+             if (current_tetro.matrix[i][j] != 0 ) // Si la valeur de la matrice du bloc est différente de 0.
               this.matrix[current_tetro.y+i][current_tetro.x+j] = current_tetro.matrix[i][j]; // On met à jour la matrice du jeu.
           }
         }
 
-        console.log(current_tetro.y + (current_tetro.matrix[0].length + 1) + " " + this.matrix.length); //
+        console.log(current_tetro.y + (current_tetro.matrix[0].length + 1) + " " + this.matrix.length); 
 
       
         this.DisplayGrid(this.matrix); 
 
 
-        for ( let i = 0; i <current_tetro.matrix.length; i++){ // On parcourt la matrice du bloc.
-          for ( let j = 0; j < current_tetro.matrix[0].length; j++){ //  On parcourt la matrice du bloc.
-            if (current_tetro.y + (current_tetro.matrix[0].length) > this.matrix.length && current_tetro.matrix[i][j] !== 0) { // Si le bloc sort du canvas.
-              console.log("Le bloc sort du canvas.");
-              current_tetro.y -= 1; // On décrémente la position du bloc en y.
-
-              current_tetro = this.getRandomTetromino(); // On crée un nouveau bloc.
-              this.DisplayGrid(this.matrix, current_tetro);
-            } 
-          }
-        }
-      }
-
-        // collision entre les blocs
-      //   collision(){
-      //   for (let i = 0; i < current_tetro.matrix.length; i++) { 
-      //     for (let j = 0; j < current_tetro.matrix[0].length; j++) { 
-      //       if (current_tetro.matrix[i][j] !== 0 && this.matrix[current_tetro.y + i + 1][current_tetro.x + j] !== 0) { 
-      //         console.log("Collision");
-      //         current_tetro = this.getRandomTetromino(); //
-      //       }
-      //     }
-      //   }
-      // }
-
-      // collision entre les blocs
-      
-
-}
+        //  for ( let i = 0; i <current_tetro.matrix.length; i++){ // On parcourt la matrice du bloc.
+        //    for ( let j = 0; j < current_tetro.matrix[0].length; j++){ //  On parcourt la matrice du bloc.
+        //    if (current_tetro.y + (current_tetro.matrix[0].length) == this.matrix.length && current_tetro.matrix[i][j] !== 0) { // Si le bloc est en bas du canvas.
+        //        console.log("Le bloc touche le sol.");
               
-   
-  
+        //        if (current_tetro.matrix[i] = 0) //si 
+        //        current_tetro.y += 1; // On incré la position du bloc en y.
+            
+        //       current_tetro = this.getRandomTetromino(); // On crée un nouveau bloc.
+        //       //this.DisplayGrid(this.matrix, current_tetro);
+        //     }
+        //   }
+        // }
+      }
+    }
+     
 
   class View {
     constructor(canvas_id) {
