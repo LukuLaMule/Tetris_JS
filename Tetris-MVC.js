@@ -85,7 +85,7 @@ class Piece{
     for (let i = 0; i < this.matrix.length; i++) {
       for (let j = 0; j < this.matrix[0].length; j++) {
         if (this.matrix[i][j] !== 0) { // On vérifie si la case n'est pas vide.
-          if (this.x + j < 0 || this.x + j + this.matrix[0].length >= 14 ) { // On vérifie si la pièce ne sort pas du canvas.
+          if (this.x + j < 0 || this.x + j + this.matrix[0].length >= 12 ) { // On vérifie si la pièce ne sort pas du canvas.
             
             return false;
           }
@@ -105,29 +105,24 @@ class Model {
     constructor() {
     
         this.matrix = [
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+            
         ];
         this.index = 0; // On initialise l'index à 0.
         // this.current_tetro = new Piece(4, 0, 4); // On crée un nouveau bloc.
@@ -180,7 +175,7 @@ class Model {
     //   }
     }
 
-    
+ 
 
     rotate() {
       // On crée une copie du bloc.
@@ -257,17 +252,18 @@ class Model {
       
 
         let authorized = true; // On initialise la variable authorized à true.
-        console.log("-- ",current_tetro.y + 1 + current_tetro.matrix.length);
+        
         if (current_tetro.y + 1 + current_tetro.matrix.length > this.matrix.length) {
-          console.log("test"+this.matrix);
+          
           // for ( let i = 0; i < current_tetro.matrix.length; i++ ){ // On parcourt la matrice du bloc.
           //   for ( let j = 0; j < current_tetro.matrix[0].length; j++){
               let line = 1 + current_tetro.y + current_tetro.matrix.length - this.matrix.length; // On calcule la ligne à partir de laquelle on vérifie si le bloc est en bas du canvas.
              // console.log(line);
-              for ( let i = 0; i < current_tetro.matrix.length ;  i++){
+              for ( let i = 0; i < current_tetro.matrix.length ;  i++){ // On parcourt la matrice du bloc.
+             
                 
                 if (current_tetro.matrix[current_tetro.matrix.length -line][i] !== 0){ // Si la ligne est différente de 0.
-                  console.log(line);
+                  
                   authorized = false;
                   break 
               
@@ -277,20 +273,27 @@ class Model {
               } 
 
           }
+            
 
             if (authorized == true ){ // Si le bloc n'est pas en bas du canvas. ( authorized est = a true de base)
-              for ( let i = 0; i < current_tetro.matrix.length; i++){
+              
+              for ( let i = 0; i < current_tetro.matrix.length; i++){ 
                 for ( let j = 0; j < current_tetro.matrix[0].length; j++){ 
-                  this.matrix[current_tetro.y+i][current_tetro.x+j] = 0;
+                  this.matrix[current_tetro.y+i][current_tetro.x+j] = 0; // On met à jour la matrice du jeu.
+
+                  
+                  
                 }
               } 
               current_tetro.y += 1;
-
+              
             } else {
               
               current_tetro = this.getRandomTetromino();
               
             }    
+        
+          
 
           // current_tetro.y +=1; // On incrémente la position du bloc en x.
         
@@ -301,6 +304,9 @@ class Model {
               this.matrix[current_tetro.y+i][current_tetro.x+j] = current_tetro.matrix[i][j]; // On met à jour la matrice du jeu.
           }
         }
+        
+      
+    
 
         console.log(current_tetro.y + (current_tetro.matrix[0].length + 1) + " " + this.matrix.length); 
 
@@ -321,6 +327,14 @@ class Model {
         //     }
         //   }
         // }
+        
+        //     if (current_tetro.matrix[i][j] !== 0 && this.matrix[current_tetro.y + i][current_tetro.x + j] !== 0) { // On vérifie si les cases de la pièce et de la grille sont occupées.
+        //       return true; // Il y a collision.
+        //       console.log("collision");
+        //     }
+          
+        //       return false; // Il n'y a pas de collision.
+        // console.log("pas de collision");
       }
     }
      
@@ -338,21 +352,21 @@ class Model {
   
     displayGrid (matrix) {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.context.strokeStyle = '#ccc';
+        this.context.strokeStyle = '#000';
 
         // Dessine les lignes verticales de la grille
         for (let x = 0; x < matrix[0].length; x++) {
           this.context.beginPath();
-          this.context.moveTo(x * 39, 0);
-          this.context.lineTo(x * 39, matrix.length * 39);
+          this.context.moveTo(x * 50, 0); // 38 pour que les lignes soient bien alignées
+          this.context.lineTo(x * 50, matrix.length *50); 
           this.context.stroke();
       }
 
       // Dessine les lignes horizontales de la grille
       for (let y = 0; y < matrix.length; y++) {
           this.context.beginPath(); // On commence un nouveau tracé.
-          this.context.moveTo(0, y * 38.8); // 38.8 pour que les lignes soient bien alignées
-          this.context.lineTo(matrix[0].length * 38.8, y * 38.8);
+          this.context.moveTo(0, y * 50); // 38.8 pour que les lignes soient bien alignées
+          this.context.lineTo(matrix[0].length * 50, y * 50);
           this.context.stroke();
       }
 
@@ -363,7 +377,7 @@ class Model {
         this.context.strokeRect(j * 50, i * 50, 50, 50);*/
           if (matrix[i][j] != 0) {  // On vérifie que la case est vide.
             this.context.fillStyle = this.couleur[matrix [i][j]]; // On définit la couleur du carré.
-            this.context.fillRect(j * 38.9, i * 38.9, 39, 39); // On dessine le carré.
+            this.context.fillRect(j * 50, i * 50, 50,50); // On dessine le carré.
           }        
         }
       } 

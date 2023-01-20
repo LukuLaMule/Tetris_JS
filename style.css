@@ -7,15 +7,18 @@
 }
 
 #canvas{
-    border: 2px solid black;
+    border-top-width: 40px ;
+    border-top-style: solid;
+    border-top-color: #004FEB;
+   /* border: 10px solid #004FEB;*/
     padding-left: 0;
     padding-right: 0;
     margin-left: auto;
     margin-right: auto;
     display: block;
-    width: 430px;
-    height: 897px;
-    color: rgb(0, 136, 255);
+    width: 450px;
+    height: 880px;
+    background-color: rgb(193, 189, 189);
     transform: scale(0.8);
 }
 
@@ -41,3 +44,4 @@ body{
     height: 100vh;
     overflow: hidden; /* Hide vertical scrollbar */
 }
+
