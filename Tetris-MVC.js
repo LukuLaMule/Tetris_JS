@@ -24,44 +24,42 @@ class Piece{
   
 
     
-    
-  
+   
 
 
   static TETROMINOS = [
     // carré
     [
-      [0, 1, 1],
-      [0, 1, 1],
-      [0, 0, 0]
+      [ 1, 1],
+      [ 1, 1],
+      
     ],
     // barre
     [
-      [0, 2 ,0 ,0, 0 ],
-      [0, 2 ,0 ,0, 0 ],
-      [0, 2 ,0 ,0, 0 ],
-      [0, 2 ,0 ,0, 0 ],
-      [0, 0, 0, 0, 0]
+      [0, 2 ,0 ,0],
+      [0, 2 ,0 ,0],
+      [0, 2 ,0 ,0],
+      [0, 2 ,0 ,0]
     ],
     // L
     [
-      [3, 0, 0, 0,],
-      [3, 0, 0, 0],
-      [3, 3, 0, 0],
-      [0, 0, 0, 0]
+      [0, 3, 0],
+      [0, 3, 0],
+      [0, 3, 3]
+     
     ],
     // L inversé
     [
-      [0, 4, 0, 0],
-      [0, 4, 0, 0],
-      [4, 4, 0, 0],
-      [0, 0, 0, 0]
+      [0, 4, 0 ],
+      [0, 4, 0 ],
+      [4, 4, 0 ]
+      
     ],
     // T
     [
+      [0, 0, 0],
       [5, 5, 5],
-      [0, 5, 0],
-      [0, 0, 0]
+      [0, 5, 0]
     ],
     // S
     [
@@ -83,11 +81,11 @@ class Piece{
   }
 
 
-  isInsideCanvas(canvasHeight, canvasWidth) {
+  isInsideCanvas() {
     for (let i = 0; i < this.matrix.length; i++) {
       for (let j = 0; j < this.matrix[0].length; j++) {
-        if (this.matrix[i][j] !== 0) {
-          if (this.x + j < 0 || this.x + j + this.matrix[0].length > canvasWidth || this.y + i < 0 || this.y + i + this.matrix[0].length > canvasHeight) {
+        if (this.matrix[i][j] !== 0) { // On vérifie si la case n'est pas vide.
+          if (this.x + j < 0 || this.x + j + this.matrix[0].length >= 14 || this.y + i < 0 || this.y + i + this.matrix[0].length > 23) { // On vérifie si la pièce ne sort pas du canvas.
             
             return false;
           }
@@ -141,7 +139,7 @@ class Model {
 
     getRandomTetromino() { // On crée une fonction qui va nous permettre de récupérer un bloc aléatoire.
       let randomIndex = Math.floor(Math.random() * Piece.TETROMINOS.length);
-      current_tetro = new Piece(3, 0, randomIndex);
+      current_tetro = new Piece(4, 0, randomIndex);
 
       // ajouter la piece dans la matrice
       for (let i = 0; i < current_tetro.matrix.length; i++) {
@@ -194,7 +192,7 @@ class Model {
         }
       }
       // On inverse les lignes.
-      copy.matrix = copy.matrix.map((row) => row.reverse());
+      copy.matrix = copy.matrix.map((row) => row.reverse()); 
       // On met à jour la matrice du jeu.
       for (let i = 0; i < copy.matrix.length; i++) {
         for (let j = 0; j < copy.matrix[0].length; j++) {
@@ -248,7 +246,7 @@ class Model {
     }
           current_tetro.x +=1; // On incrémente la position du bloc en x.
 
-          if (!current_tetro.isInsideCanvas(this.canvasHeight, this.canvasWidth)) { // Si le bloc sort du canvas.
+          if (!current_tetro.isInsideCanvas(this.canvasHeight, this.matrix[0].length)) { // Si le bloc sort du canvas.
             console.log("Le bloc sort du canvas.");
             current_tetro.x -= 1; // On décrémente la position du bloc en x.
           }
@@ -303,18 +301,8 @@ class Model {
       //   }
       // }
 
-      collision() {
-        for (let i = 0; i < current_tetro.matrix.length; i++) {
-            for (let j = 0; j < current_tetro.matrix[0].length; j++) {
-                if (current_tetro.matrix[i][j] !== 0 && this.matrix[current_tetro.y + i + 1][current_tetro.x + j] !== 0) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    
+      // collision entre les blocs
+      
 
 }
               
