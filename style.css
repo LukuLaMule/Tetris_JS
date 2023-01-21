@@ -7,17 +7,18 @@
 }
 
 #canvas{
-    border-top-width: 40px ;
+    /* border-top-width: 40px ;
     border-top-style: solid;
-    border-top-color: #004FEB;
+    border-top-color: #004FEB; */
    /* border: 10px solid #004FEB;*/
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    width: 450px;
-    height: 880px;
+    /* padding-left: 0;
+    padding-right: 0; */
+    /* margin-left: auto;
+    margin-right: auto; */
+    /* border: none;
+    display: block; */
+    /* width: 455px;
+    height: 856px; */
     background-color: rgb(193, 189, 189);
     transform: scale(0.8);
 }
@@ -31,7 +32,7 @@
 }
 
 #tetris h2{
-    margin: 0;
+    margin: none;
 }
 
 /* */
@@ -44,4 +45,67 @@ body{
     height: 100vh;
     overflow: hidden; /* Hide vertical scrollbar */
 }
+
+table{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 455px;
+    height: 856px;
+    background-color: rgb(193, 189, 189);
+    transform: scale(0.8);
+    border: 6px solid #004FEB ;
+    border-spacing: 0;
+}
+
+#exe{
+        
+    font-family: monospace; 
+    font-size: 16px;
+    color: aliceblue;
+    transform: translateY(35px);
+    
+}
+
+#haut{
+    width: 455px;
+    height: 10px;
+    background-color: #004FEB;
+    padding: 0;
+    margin: 0;
+    border: 9px solid #fff ;
+    
+
+}
+
+#croix{
+
+    margin-left: 85%;
+    border: 0  ;
+
+}
+ #logo{
+    margin-left: 1%;
+    margin-top: 0%;
+    width: 60px;
+    height: 60px;
+    padding-top: 20px;
+    display: inline-block;
+ }
+
+ #cs{
+    margin-left: 1%;
+    margin-top: 5%;
+    width: 20px;
+    height: 20px;
+    padding-top: 20px;
+    
+    color: #fff;
+    float: left;
+ }
+
+
+ 
+ 
 

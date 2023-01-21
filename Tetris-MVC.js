@@ -134,7 +134,7 @@ class Model {
 
     getRandomTetromino() { // On crée une fonction qui va nous permettre de récupérer un bloc aléatoire.
       let randomIndex = Math.floor(Math.random() * Piece.TETROMINOS.length);
-      current_tetro = new Piece(4, 0, randomIndex);
+      current_tetro = new Piece(3, 0, randomIndex);
 
       // ajouter la piece dans la matrice
       for (let i = 0; i < current_tetro.matrix.length; i++) {
