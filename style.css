@@ -7,18 +7,7 @@
 }
 
 #canvas{
-    /* border-top-width: 40px ;
-    border-top-style: solid;
-    border-top-color: #004FEB; */
-   /* border: 10px solid #004FEB;*/
-    /* padding-left: 0;
-    padding-right: 0; */
-    /* margin-left: auto;
-    margin-right: auto; */
-    /* border: none;
-    display: block; */
-    /* width: 455px;
-    height: 856px; */
+   
     background-color: rgb(193, 189, 189);
     transform: scale(0.8);
 }
