@@ -78,7 +78,7 @@ export let current_tetro; // On crée une variable qui contient le bloc courant.
 
 class Model {
 
-  
+
 
   constructor() { // On crée une fonction constructeur.
 
@@ -104,18 +104,18 @@ class Model {
     ];
 
     this.index = 0; // On initialise l'index à 0.
-    
-    
+
+
     this.getRandomTetromino(); // On appelle la fonction qui crée un bloc aléatoire.
-    
-    
+
+
   }
 
   Score = 0; // On crée une variable qui contient le score.
   // incrémente le score des qu'une piece est posée
   incrementScore() {
     this.Score += 10;// On incrémente le score de 10.
-   
+
 
 
     //récupère l'élément score dans le html
@@ -124,8 +124,8 @@ class Model {
     score.innerHTML = this.Score;
 
   }
- 
-  
+
+
   getRandomTetromino() { // On crée une fonction qui va nous permettre de récupérer un bloc aléatoire.
     let randomIndex = Math.floor(Math.random() * Piece.TETROMINOS.length); // On crée une variable qui contient un nombre aléatoire entre 1 et 7.
     current_tetro = new Piece(3, 0, randomIndex); // On crée une variable qui contient un nouveau bloc.
@@ -133,9 +133,12 @@ class Model {
     // ajouter la piece dans la matrice
     for (let i = 0; i < current_tetro.matrix.length; i++) { // On parcourt la matrice du bloc.
       for (let j = 0; j < current_tetro.matrix[0].length; j++) { // On parcourt la matrice du bloc.
-        if (this.matrix[current_tetro.y + i][current_tetro.x + j] !== 0) { // On vérifie si la case n'est pas vide.
-          alert("Game Over : Votre Score est de" + "\xa0" + this.Score ); // On affiche un message d'alerte.
-          }
+        if (this.matrix[current_tetro.y + i][current_tetro.x + j] !== 0 
+          && this.matrix[current_tetro.y + i][current_tetro.x + j] !== current_tetro.rand) { // On vérifie si la case n'est pas vide.
+     
+         
+          alert("Game Over : Votre Score est de" + "\xa0" + this.Score); // On affiche un message d'alerte.
+        }
 
         if (current_tetro.matrix[i][j] !== 0) { // On vérifie si la case n'est pas vide.
           let pieceValue = current_tetro.matrix[i][j]; // On récupère la valeur de la case.
@@ -299,11 +302,11 @@ class Model {
         }
       }
       current_tetro = this.getRandomTetromino(); // On récupère un nouveau bloc.
-    
+
 
     }
     this.DisplayGrid(this.matrix); // On affiche la matrice du jeu.
-    
+
 
   }
 
@@ -326,7 +329,7 @@ class Model {
           if (current_tetro.matrix[i][j] != 0 && current_tetro.y + i + 1 >= this.matrix.length) { // Si la valeur de la matrice du bloc est différente de 0.
             authorized = false; // On ne peut pas descendre.
             break; // On arrête la boucle.
-          } 
+          }
           if (current_tetro.matrix[i][j] != 0 && this.matrix[current_tetro.y + i + 1][current_tetro.x + j] != 0) { // Si la valeur de la matrice du bloc est différente de 0.
             authorized = false; // On ne peut pas descendre.
             break; // On arrête la boucle.
@@ -345,8 +348,8 @@ class Model {
           this.matrix[current_tetro.y + i][current_tetro.x + j] = current_tetro.matrix[i][j]; // On met à jour la matrice du jeu.
       }
     }
-    current_tetro = this.getRandomTetromino(); // On récupère un nouveau bloc.
     
+
     this.DisplayGrid(this.matrix); // On affiche la matrice du jeu.
   }
 }
@@ -356,19 +359,19 @@ class View { // Classe qui gère l'affichage du jeu.
     this.canvas = document.getElementById(canvas_id) // On récupère le canvas.
     this.context = this.canvas.getContext("2d"); // On récupère le contexte du canvas.
     this.couleur = ['brown', 'yellow', 'green', 'blue', 'orange', 'pink', 'cyan']; // Couleurs des blocs.
-    
+
     this.rand = Math.floor(Math.random() * this.couleur.length); // On choisit une couleur aléatoire.
-    
-   
+
+
   }
-  
+
 
   displayGrid(matrix) { // Méthode qui affiche la grille du jeu.
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height); // On efface le canvas.
     this.context.strokeStyle = '#000'; // Couleur des lignes de la grille.
 
     // Dessine les lignes verticales de la grille
-    for (let x = 0; x < matrix[0].length; x++) { 
+    for (let x = 0; x < matrix[0].length; x++) {
       this.context.beginPath(); // On commence un nouveau tracé.
       this.context.moveTo(x * 50, 0); // On déplace le curseur.
       this.context.lineTo(x * 50, matrix.length * 50); // On trace une ligne.
@@ -377,15 +380,15 @@ class View { // Classe qui gère l'affichage du jeu.
 
     // Dessine les lignes horizontales de la grille
     for (let y = 0; y < matrix.length; y++) {
-      this.context.beginPath(); 
-      this.context.moveTo(0, y * 50); 
+      this.context.beginPath();
+      this.context.moveTo(0, y * 50);
       this.context.lineTo(matrix[0].length * 50, y * 50);
       this.context.stroke();
     }
 
     for (let i = 0; i < matrix.length; i++) { // On parcourt la matrice du jeu.
       for (let j = 0; j < matrix[0].length; j++) { // On parcourt la matrice du jeu.
-          if (matrix[i][j] != 0) {  // On vérifie que la case est vide.
+        if (matrix[i][j] != 0) {  // On vérifie que la case est vide.
           this.context.fillStyle = this.couleur[matrix[i][j]]; // On définit la couleur du carré.
           console.log(this.couleur[matrix[i][j]]); // On affiche la couleur du carré.
           this.context.fillRect(j * 50, i * 50, 50, 50); // On dessine le carré.
@@ -408,19 +411,18 @@ class View { // Classe qui gère l'affichage du jeu.
 }
 
 class Controller { // Classe qui gère les évènements du jeu.
-  
+
   constructor(model, view, Piece) { // Constructeur de la classe qui appelle les classes Model et View et la classe Piece.
     this.model = model; // On récupère l'instance de la classe Model.
     this.view = view; // On récupère l'instance de la classe View.
     this.Piece = Piece; // On récupère l'instance de la classe Piece.
-    
+
 
     this.bindDisplayCNF = this.bindDisplayCNF.bind(this); // On lie la fonction bindDisplayCNF à l'instance de la classe Controller.
 
     this.model.bindDisplayGrid(this.bindDisplayCNF); // On lie la fonction bindDisplayCNF à l'instance de la classe Model.
 
-    this.stopGame = this.stopGame.bind(this); // On lie la fonction stopGame à l'instance de la classe Controller.
-    this.model.bindSetInterval(this.stopGame); // On lie la fonction stopGame à l'instance de la classe Model.
+  
     this.initEvent(); // On initialise les évènements.
 
     this.model.play(); // On lance le jeu.
@@ -430,7 +432,7 @@ class Controller { // Classe qui gère les évènements du jeu.
 
 
     this.interval = setInterval(() => { // Toutes les 500ms, on fait descendre le bloc.
-      if (!this.model.moveDown()) { 
+      if (!this.model.moveDown()) {
 
       }
     }, 500); // On lance le jeu toutes les 500ms.
@@ -442,12 +444,12 @@ class Controller { // Classe qui gère les évènements du jeu.
     this.view.displayGrid(grid); // On affiche la grille de la classe View.
   }
 
-    stopGame() { // On stop le jeu.
-    clearInterval(this.interval); // On arrête le setInterval.
-     this.model.stopGame(); // On arrête le jeu.
-     this.view.gameOver(); // On affiche le message de fin de jeu. 
+  // stopGame() { // On stop le jeu.
+  //   clearInterval(this.interval); // On arrête le setInterval.
+  //   this.model.stopGame(); // On arrête le jeu.
+  //   this.view.gameOver(); // On affiche le message de fin de jeu. 
 
-   }
+  // }
 
   initEvent() { // On initialise les évènements.
     document.addEventListener('keydown', (event) => { // On écoute l'évènement keydown.
